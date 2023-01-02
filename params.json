@@ -1,0 +1,16 @@
+{ 
+    "project_folder" : "/beegfs/group_bit/home/AIqbal/nf-deepvariant-test" ,
+    "deepvariant_raw_data" : "/beegfs/group_bit/home/AIqbal/nf-deepvariant-test/raw_data",
+    "tmp":"/beegfs/group_bit/home/AIqbal/nf-deepvariant-test/tmp",
+    "genomes" : "/beegfs/common/genomes" ,
+    "organism" : "caenorhabditis_elegans" ,
+    "release" : "107" ,
+    "url_gtf" : "ftp://ftp.ensembl.org/pub/release-107/gtf/caenorhabditis_elegans/" ,
+    "url_dna" : "ftp://ftp.ensembl.org/pub/release-107/fasta/caenorhabditis_elegans/dna/" ,
+    "ercc_label" : "ercc92" ,
+    "url_ercc_gtf" : "https://datashare.mpcdf.mpg.de/s/MOxbNrXeBNcg9wt/download" ,
+    "url_ercc_fa" : "https://datashare.mpcdf.mpg.de/s/H9PQu3vDRi9saqV/download",
+    "model" : "WES",
+    "exomebed" : "none"
+ }
+  
