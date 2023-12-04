@@ -1,8 +1,8 @@
 { 
-    "project_folder" : "/beegfs/group_bit/home/AIqbal/nf-deepvariant-test" ,
-    "deepvariant_raw_data" : "/beegfs/group_bit/home/AIqbal/nf-deepvariant-test/raw_data",
-    "tmp":"/beegfs/group_bit/home/AIqbal/nf-deepvariant-test/tmp",
-    "genomes" : "/beegfs/common/genomes" ,
+    "project_folder" : "/u/aiqbal/nf-deepvariant-test" ,
+    "deepvariant_raw_data" : "/u/aiqbal//nf-deepvariant-test/raw_data",
+    "tmp":"/u/aiqbal/nf-deepvariant-test/tmp",
+    "genomes" : "/nexus/posix0/MAGE-flaski/service/genomes/" ,
     "organism" : "caenorhabditis_elegans" ,
     "release" : "107" ,
     "url_gtf" : "ftp://ftp.ensembl.org/pub/release-107/gtf/caenorhabditis_elegans/" ,
