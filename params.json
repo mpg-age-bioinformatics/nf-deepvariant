@@ -1,16 +1,26 @@
-{ 
-    "project_folder" : "/u/aiqbal/nf-deepvariant-test" ,
-    "deepvariant_raw_data" : "/u/aiqbal//nf-deepvariant-test/raw_data",
-    "tmp":"/u/aiqbal/nf-deepvariant-test/tmp",
-    "genomes" : "/nexus/posix0/MAGE-flaski/service/genomes/" ,
-    "organism" : "caenorhabditis_elegans" ,
-    "release" : "107" ,
-    "url_gtf" : "ftp://ftp.ensembl.org/pub/release-107/gtf/caenorhabditis_elegans/" ,
-    "url_dna" : "ftp://ftp.ensembl.org/pub/release-107/fasta/caenorhabditis_elegans/dna/" ,
-    "ercc_label" : "ercc92" ,
-    "url_ercc_gtf" : "https://datashare.mpcdf.mpg.de/s/MOxbNrXeBNcg9wt/download" ,
-    "url_ercc_fa" : "https://datashare.mpcdf.mpg.de/s/H9PQu3vDRi9saqV/download",
-    "model" : "WES",
-    "exomebed" : "none"
- }
-  
+ {
+    "homefolder": "", 
+    "wget" : "NONE",
+    "kallisto_raw_data" : "",
+    "project_folder" : "/nexus/posix0/MAGE-flaski/service/posit/home/aiqbal/nextflow-variant-calling/", 
+    "fastqc_raw_data" : "/nexus/posix0/MAGE-flaski/service/posit/home/aiqbal/nextflow-variant-calling/raw_data", 
+    "bwa_raw_data" : "/nexus/posix0/MAGE-flaski/service/posit/home/aiqbal/nextflow-variant-calling/raw_data",
+    "deepvariant_raw_data" : "/nexus/posix0/MAGE-flaski/service/posit/home/aiqbal/nextflow-variant-calling/bwa_output",
+    "featurecounts_raw_data" : "/nexus/posix0/MAGE-flaski/service/posit/home/aiqbal/nextflow-variant-calling/raw_data",
+    "vep_raw_data" : "/nexus/posix0/MAGE-flaski/service/posit/home/aiqbal/nextflow-variant-calling/filter",
+    "genomes" : "/nexus/posix0/MAGE-flaski/service/genomes/variantcalling/",
+    "organism" : "mus_musculus",
+    "release" : "110",
+    "url_gtf" : "ftp://ftp.ensembl.org/pub/release-110/gtf/mus_musculus/",
+    "url_dna" : "ftp://ftp.ensembl.org/pub/release-110/fasta/mus_musculus/dna/",
+    "model" : "WGS",
+    "tmp" : "/nexus/posix0/MAGE-flaski/service/posit/home/aiqbal/nextflow-variant-calling/tmp",
+    "exomebed" : "none",
+    "exomegtf" : "/nexus/posix0/MAGE-flaski/service/posit/home/aiqbal/nextflow-variant-calling/tmp/target_exons.gtf",
+    "samplestable" : "/nexus/posix0/MAGE-flaski/service/posit/home/aiqbal/nextflow-variant-calling/varCall_nf_sampleSheet.xlsx",
+    "genome" : "mm10",
+    "genome_assembly_vep" : "GRCm39",
+    "mapping_output" : "bwa_output",
+    "bam" : "None",
+    "gtf" : "/nexus/posix0/MAGE-flaski/service/posit/home/aiqbal/nextflow-variant-calling/tmp/target_exons.gtf"
+}
