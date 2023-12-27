@@ -39,36 +39,55 @@ process get_images {
 
 }
 
+process ucsc_to_ensembl {
+  stageInMode 'symlink'
+  stageOutMode 'move'
+
+  input:
+    val bed
+
+  output:
+    val bed
+
+  when:
+    ( "${bed}" != "none")
+
+  script:
+    """
+    sed -i 's/chr//g' ${bed}
+    """
+}
+
 process deepvariant {
   stageInMode 'symlink'
   stageOutMode 'move'
   
   input:
     tuple val(pair_id), path(bwa)
+    val exomebed
 
   output:
     val pair_id
 
   when:
     ( ! file("${params.project_folder}/deepvariant_output/${pair_id}.vcf.gz").exists() ) 
-
   
   script:
     """
     mkdir -p /workdir/deepvariant_output
     
-    if [ "${params.exomebed}" != ""  ] ; then
+    if [[ "${exomebed}" != "" ]] ; then
 
       /opt/deepvariant/bin/run_deepvariant --model_type=${params.model} \
       --ref=${params.genomes}${params.organism}/${params.release}/${params.organism}.${params.release}.fa \
       --reads=/raw_data/${pair_id}.sorted.bam \
-      --regions=${params.exomebed} \
+      --regions=${exomebed} \
       --output_vcf=/workdir/deepvariant_output/${pair_id}.vcf.gz \
       --output_gvcf=/workdir/deepvariant_output/${pair_id}.g.vcf.gz \
       --sample_name ${pair_id} \
       --num_shards=${task.cpus}
 
-    else
+    elif [[ "${exomebed}" == "" ]] ; then
 
       /opt/deepvariant/bin/run_deepvariant --model_type=${params.model} \
       --ref=${params.genomes}${params.organism}/${params.release}/${params.organism}.${params.release}.fa \
@@ -89,6 +108,7 @@ process filtering {
   input:
     val pair_id
     tuple val(pair_id), path(bwa)
+    path(bed)
 
   output:
     val pair_id
@@ -110,9 +130,6 @@ process subtractWT {
 
   input:
     val pair_id
-
-  // output:
-  
 
   script:
     """
@@ -158,14 +175,7 @@ process subtractWT {
 
     """
 
-
-
 }
-
-
-
-
-
 
 workflow images {
   main:
@@ -174,8 +184,15 @@ workflow images {
 
 workflow {
   main:
+    if ( "${params.exomebed}" != "none" ) {
+    exomebed=ucsc_to_ensembl( "${params.exomebed}" )  
+    } else {
+    exomebed=""
+    }
+    println "${exomebed}"
+
     data = channel.fromFilePairs( "${params.deepvariant_raw_data}/*.sorted.bam", size: -1 )
-    deepvariant( data )
-    filtering( deepvariant.out.collect(), data )
-    subtractWT( filtering.out.collect() )
+    deepvariant( data,  "${exomebed}")
+    // filtering( deepvariant.out.collect(), data )
+    // subtractWT( filtering.out.collect() )
 }
