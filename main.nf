@@ -142,7 +142,7 @@ process subtractWT {
     filterfolder="/workdir/filter/"
     print(filterfolder)
 
-    sample_sheet=${sample_table}
+    sample_sheet="${sample_table}"
     print(sample_sheet)
 
     samples = pd.read_excel(sample_sheet, sheet_name='samples')
@@ -189,10 +189,10 @@ workflow {
     } else {
     exomebed=""
     }
-    println "${exomebed}"
+    println exomebed
 
     data = channel.fromFilePairs( "${params.deepvariant_raw_data}/*.sorted.bam", size: -1 )
-    deepvariant( data,  "${exomebed}")
+    deepvariant( data,  exomebed)
     filtering( deepvariant.out.collect(), data )
     subtractWT( filtering.out.collect(), params.samplestable )
 }
