@@ -108,7 +108,6 @@ process filtering {
   input:
     val pair_id
     tuple val(pair_id), path(bwa)
-    path(bed)
 
   output:
     val pair_id
@@ -130,6 +129,7 @@ process subtractWT {
 
   input:
     val pair_id
+    val sample_table
 
   script:
     """
@@ -142,7 +142,7 @@ process subtractWT {
     filterfolder="/workdir/filter/"
     print(filterfolder)
 
-    sample_sheet="/workdir/sample_sheet.xlsx"
+    sample_sheet=${sample_table}
     print(sample_sheet)
 
     samples = pd.read_excel(sample_sheet, sheet_name='samples')
@@ -194,5 +194,5 @@ workflow {
     data = channel.fromFilePairs( "${params.deepvariant_raw_data}/*.sorted.bam", size: -1 )
     deepvariant( data,  "${exomebed}")
     filtering( deepvariant.out.collect(), data )
-    subtractWT( filtering.out.collect() )
+    subtractWT( filtering.out.collect(), params.samplestable )
 }
