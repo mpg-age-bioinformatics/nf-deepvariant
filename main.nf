@@ -191,7 +191,7 @@ workflow {
     }
     println exomebed
 
-    data = channel.fromFilePairs( "${params.deepvariant_raw_data}/*.sorted.bam", size: -1 )
+    data = channel.fromFilePairs( "${params.project_folder}${params.mapping_output}/*.sorted.bam", size: -1 )
     deepvariant( data,  exomebed)
     filtering( deepvariant.out.collect(), data )
     subtractWT( filtering.out.collect(), params.samplestable )
