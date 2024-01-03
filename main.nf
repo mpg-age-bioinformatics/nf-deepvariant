@@ -80,7 +80,7 @@ process deepvariant {
 
       /opt/deepvariant/bin/run_deepvariant --model_type=${params.model} \
       --ref=${params.genomes}${params.organism}/${params.release}/${params.organism}.${params.release}.fa \
-      --reads=/raw_data/${pair_id}.sorted.bam \
+      --reads=/workdir/${params.mapping_output}/${pair_id}.sorted.bam \
       --regions=${exomebed} \
       --output_vcf=/workdir/deepvariant_output/${pair_id}.vcf.gz \
       --output_gvcf=/workdir/deepvariant_output/${pair_id}.g.vcf.gz \
@@ -91,7 +91,7 @@ process deepvariant {
 
       /opt/deepvariant/bin/run_deepvariant --model_type=${params.model} \
       --ref=${params.genomes}${params.organism}/${params.release}/${params.organism}.${params.release}.fa \
-      --reads=/raw_data/${pair_id}.sorted.bam \
+      --reads=/workdir/${params.mapping_output}/${pair_id}.sorted.bam \
       --output_vcf=/workdir/deepvariant_output/${pair_id}.vcf.gz \
       --output_gvcf=/workdir/deepvariant_output/${pair_id}.g.vcf.gz \
       --sample_name ${pair_id} \
