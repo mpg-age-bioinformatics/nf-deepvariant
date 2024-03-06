@@ -32,7 +32,7 @@ process get_images {
       then
 
         docker pull google/deepvariant:1.4.0
-        ocker pull mpgagebioinformatics/rnaseq.python:3.8-2
+        docker pull mpgagebioinformatics/rnaseq.python:3.8-2
 
     fi
     """
@@ -54,7 +54,8 @@ process ucsc_to_ensembl {
 
   script:
     """
-    sed -i 's/chr//g' ${bed}
+    echo ${bed}
+    cat ${bed} | tr -d 'chr' > ${bed}
     """
 }
 
@@ -76,7 +77,7 @@ process deepvariant {
     """
     mkdir -p /workdir/deepvariant_output
     
-    if [[ "${exomebed}" != "" ]] ; then
+    if [[ "${exomebed}" != "none" ]] ; then
 
       /opt/deepvariant/bin/run_deepvariant --model_type=${params.model} \
       --ref=${params.genomes}${params.organism}/${params.release}/${params.organism}.${params.release}.fa \
@@ -87,7 +88,7 @@ process deepvariant {
       --sample_name ${pair_id} \
       --num_shards=${task.cpus}
 
-    elif [[ "${exomebed}" == "" ]] ; then
+    elif [[ "${exomebed}" == "none" ]] ; then
 
       /opt/deepvariant/bin/run_deepvariant --model_type=${params.model} \
       --ref=${params.genomes}${params.organism}/${params.release}/${params.organism}.${params.release}.fa \
@@ -106,7 +107,6 @@ process filtering {
   stageOutMode 'move'
 
   input:
-    val pair_id
     tuple val(pair_id), path(bwa)
 
   output:
@@ -182,17 +182,25 @@ workflow images {
     get_images()
 }
 
-workflow {
+workflow run_ucsc_to_ensembl {
   main:
     if ( "${params.exomebed}" != "none" ) {
-    exomebed=ucsc_to_ensembl( "${params.exomebed}" )  
-    } else {
-    exomebed=""
+      ucsc_to_ensembl( "${params.exomebed}" )
     }
-    println exomebed
+}
 
-    data = channel.fromFilePairs( "${params.project_folder}${params.mapping_output}/*.sorted.bam", size: -1 )
-    deepvariant( data,  exomebed)
-    filtering( deepvariant.out.collect(), data )
-    subtractWT( filtering.out.collect(), params.samplestable )
+workflow run_deepVariant{
+  data = channel.fromFilePairs( "${params.project_folder}/${params.mapping_output}/*.sorted.bam", size: -1 )
+  deepvariant( data, "${params.exomebed}" )
+
+}
+
+workflow run_filtering {
+  data = channel.fromFilePairs( "${params.project_folder}/${params.mapping_output}/*.sorted.bam", size: -1 )
+  filtering( data )
+
+}
+
+workflow run_subtractWT {
+  subtractWT( "${params.samplestable}" )
 }
