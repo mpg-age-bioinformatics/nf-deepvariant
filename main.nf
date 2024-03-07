@@ -43,19 +43,15 @@ process ucsc_to_ensembl {
   stageInMode 'symlink'
   stageOutMode 'move'
 
-  input:
-    val bed
-
-  output:
-    val bed
-
   when:
-    ( "${bed}" != "none")
+    ( ! file("${params.project_folder}/cleaned_exons.bed").exists() )
 
   script:
     """
-    echo ${bed}
-    cat ${bed} | tr -d 'chr' > ${bed}
+    echo "${params.exomebed}"
+    echo "${params.project_folder}/cleaned_exons.bed"
+
+    awk '{if(index(\$1, "chr") == 1) {sub(/^chr/, "", \$1);} print}' "${params.exomebed}" > "${params.project_folder}/cleaned_exons.bed"
     """
 }
 
@@ -82,7 +78,7 @@ process deepvariant {
       /opt/deepvariant/bin/run_deepvariant --model_type=${params.model} \
       --ref=${params.genomes}${params.organism}/${params.release}/${params.organism}.${params.release}.fa \
       --reads=/workdir/${params.mapping_output}/${pair_id}.sorted.bam \
-      --regions=${exomebed} \
+      --regions="${params.project_folder}/cleaned_exons.bed" \
       --output_vcf=/workdir/deepvariant_output/${pair_id}.vcf.gz \
       --output_gvcf=/workdir/deepvariant_output/${pair_id}.g.vcf.gz \
       --sample_name ${pair_id} \
@@ -185,7 +181,7 @@ workflow images {
 workflow run_ucsc_to_ensembl {
   main:
     if ( "${params.exomebed}" != "none" ) {
-      ucsc_to_ensembl( "${params.exomebed}" )
+      ucsc_to_ensembl( )
     }
 }
 
