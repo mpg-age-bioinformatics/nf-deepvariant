@@ -172,9 +172,29 @@ process subtractWT {
 
 }
 
+process upload_paths {
+  stageInMode 'symlink'
+  stageOutMode 'move'
+
+  script:
+  """
+    cd ${params.project_folder}/filter
+    rm -rf upload.txt
+    for f in \$(ls *.vcf) ; do echo "variants \$(readlink -f \${f})" >>  upload.txt_ ; done
+    uniq upload.txt_ upload.txt 
+    rm upload.txt_
+  """
+}
+
+
 workflow images {
   main:
     get_images()
+}
+
+workflow upload {
+  main:
+    upload_paths()
 }
 
 workflow run_ucsc_to_ensembl {
