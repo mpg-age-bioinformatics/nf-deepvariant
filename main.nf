@@ -124,7 +124,6 @@ process subtractWT {
   stageOutMode 'move'
 
   input:
-    val pair_id
     val sample_table
 
   script:
